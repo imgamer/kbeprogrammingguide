@@ -26,14 +26,48 @@ KBEngine引擎默认资产库`<assets>`目录，如果用户没有设置环境�
 `<res>/entities/defs/<entity>.def`文件确定你的脚本在KBE中如何关联。这个机制允许KBE系统把发送和接收消息的任务抽象成简单的调用entity的不同脚本方法。某种意义上，definition文件提供了entity的接口，而在python脚本中具体实现。下图展示了kbe entity的概念部分：  
 ![Conceptual parts of an entity](../image/Conceptual parts of an entity.png)  
 
-Each entity type has a corresponding definition file, named after the entityʹs type name
-followed by the extension ʹ.defʹ. For example, a Seat entity type would have a file called
-Seat.def.
-It is useful then, to have a ʹminimalʹ definition file to aid in quickly defining a new entity, as
-well as to assist in explaining what the documentʹs section is trying to accomplish.
-The following file is a minimal entity definition file:
+每个entity类型有一个对应的定义文件，命名为entity名，后缀为`.def`。例如，一个Avatar entity类型会有一个叫做`Avatar.def`的文件。  
+接下来是一个新entity的最小定义文件，用于说明本章节想要表达的内容：  
+![Minimal entity definition file]()
 
-![Minimal entity definition file]()  
 By the end of this chapter, we should be able to replace all placeholders (denoted by italics)
 in the example file above with actual code.
 
+2.3. The script files
+Big World Technology divides processing of entities in a game world into three different
+execution contexts:
+Entity
+type Script file location Description
+Cell <res>/entities/cell Takes care of the portions of an entity that affect the space
+around it.
+Processing takes place on the server cluster.
+Base <res>/entities/base Takes care of the portions of an entity that do not affect the
+space around it (as well as possibly acting as a proxy for a
+player).
+Processing takes place on the server cluster.
+Client <res>/entities/client Takes care of the portions of an entity that require heavy
+awareness of the surrounding environment.
+Entity types
+It is possible for some entity instances to not have one of these three parts. Furthermore,
+some entity types may not support ever having one of these parts. For each entity type,
+there is a script file for each of CellApp, BaseApp, and Client, if that type supports that
+execution context.
+These script files are named after the entity type, followed by the extension .py. This file
+must contain a class with the name of the entity type.
+For example, if you have an entity type Seat that can have cell, base and client execution
+contexts, there would be three script files, each with the implementation of the class:
+􀂃 <res>/entities/cell/Seat.py
+􀂃 <res>/entities/base/Seat.py
+􀂃 <res>/entities/client/Seat.py
+The entityʹs base class defined in the script file is determined by the execution context that
+the file represents, as described below:
+
+Script file
+execution context
+Entity's base class
+Cell BigWorld.Entity
+Base BigWorld.Base or BigWorld.Proxy
+Client BigWorld.Entity
+Entity's base class per execution context
+For more details about the difference between the Base and Proxy classes, see Proxies and
+Players on page 85.
