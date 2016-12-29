@@ -24,7 +24,7 @@ KBEngine引擎默认资产库`<assets>`目录，如果用户没有设置环境�
 
 ### 2.3. definition文件
 `<res>/entities/defs/<entity>.def`文件确定你的脚本在KBE中如何关联。这个机制允许KBE系统把发送和接收消息的任务抽象成简单的调用entity的不同脚本方法。某种意义上，definition文件提供了entity的接口，而在python脚本中具体实现。下图展示了kbe entity的概念部分：  
-![Conceptual parts of an entity]()  
+![Conceptual parts of an entity](../image/Conceptual parts of an entity.png)  
 
 Each entity type has a corresponding definition file, named after the entityʹs type name
 followed by the extension ʹ.defʹ. For example, a Seat entity type would have a file called
