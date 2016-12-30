@@ -27,11 +27,43 @@ KBEngine引擎默认资产库`<assets>`目录，如果用户没有设置环境�
 ![Conceptual parts of an entity](../image/Conceptual parts of an entity.png)  
 
 每个entity类型有一个对应的定义文件，命名为entity名，后缀为`.def`。例如，一个Avatar entity类型会有一个叫做`Avatar.def`的文件。  
-接下来是一个新entity的最小定义文件，用于说明本章节想要表达的内容：  
-![Minimal entity definition file]()
+以下是一个新entity的最小定义文件，用于说明本章节想要表达的内容：  
+```
+<root>
+	<Parent> optional parent entity </Parent>
 
-By the end of this chapter, we should be able to replace all placeholders (denoted by italics)
-in the example file above with actual code.
+	<Implements>
+		<!-- interface references -->
+	</Implements>
+
+	<ClientName> optional client type </ClientName>
+
+	<Volatile>
+		<!-- volatile definitions -->
+	</Volatile>
+
+	<Properties>
+		<!-- properties -->
+	</Properties>
+
+	<ClientMethods>
+		<!-- declaration -->
+	</ClientMethods>
+
+	<CellMethods>
+		<!-- declaration -->
+	</CellMethods>
+
+	<BaseMethods>
+		<!-- declaration -->
+	</BaseMethods>
+
+	<LoDLevels>
+		<!-- levels of detail -->
+	</LoDLevels>
+</root>
+```
+接下来我们将学习到使用实际的代码替换上述def文件例子中的注释(`<!-- -->`)说明。
 
 2.3. The script files
 Big World Technology divides processing of entities in a game world into three different
