@@ -65,27 +65,18 @@ KBEngine引擎默认资产库`<assets>`目录，如果用户没有设置环境�
 ```
 接下来我们将学习到使用实际的代码替换上述def文件例子中的注释(`<!-- -->`)说明。
 
-2.3. The script files
-Big World Technology divides processing of entities in a game world into three different
-execution contexts:
-Entity
-type Script file location Description
-Cell <res>/entities/cell Takes care of the portions of an entity that affect the space
-around it.
-Processing takes place on the server cluster.
-Base <res>/entities/base Takes care of the portions of an entity that do not affect the
-space around it (as well as possibly acting as a proxy for a
-player).
-Processing takes place on the server cluster.
-Client <res>/entities/client Takes care of the portions of an entity that require heavy
-awareness of the surrounding environment.
-Entity types
-It is possible for some entity instances to not have one of these three parts. Furthermore,
-some entity types may not support ever having one of these parts. For each entity type,
-there is a script file for each of CellApp, BaseApp, and Client, if that type supports that
-execution context.
-These script files are named after the entity type, followed by the extension .py. This file
-must contain a class with the name of the entity type.
+2.4. 脚本文件
+KBE技术把在游戏世界中的entity划分为3个不同的部分，也就是3个不同的执行上下文(execution contexts):  
+
+
+Entity 类型 | 脚本文件位置 | 描述
+- | - | -
+Cell | `<res>/entities/cell` | Takes care of the portions of an entity that affect the space around it.  
+Base | `<res>/entities/base` | Takes care of the portions of an entity that do not affect the space around it (as well as possibly acting as a proxy for a player). Processing takes place on the server cluster.
+Client | `<res>/entities/client` | Takes care of the portions of an entity that require heavy awareness of the surrounding environment.
+
+有些entity实例只具有3个部分中的一个也是可以的。此外，有些entity类型可能不支持具有这些部分中的一个。对每个entity类型而言，如果这类型支持对应的可执行上线文的话，在CellApp、BaseApp、Client都会有一个对应的脚本文件。  
+这些脚本文件以entity类型名加`.py`扩展名命名。这个文件必须包含一个名字为entity类型名的类。  
 For example, if you have an entity type Seat that can have cell, base and client execution
 contexts, there would be three script files, each with the implementation of the class:
 􀂃 <res>/entities/cell/Seat.py
