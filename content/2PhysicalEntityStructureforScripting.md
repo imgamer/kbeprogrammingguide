@@ -71,17 +71,18 @@ KBE技术把在游戏世界中的entity划分为3个不同的部分，也就是3
 
 Entity 类型 | 脚本文件位置 | 描述
 - | - | -
-Cell | `<res>/entities/cell` | Takes care of the portions of an entity that affect the space around it.  
-Base | `<res>/entities/base` | Takes care of the portions of an entity that do not affect the space around it (as well as possibly acting as a proxy for a player). Processing takes place on the server cluster.
-Client | `<res>/entities/client` | Takes care of the portions of an entity that require heavy awareness of the surrounding environment.
+Cell | `<res>/entities/cell` | 负责实体影响其周围空间的部分.  
+Base | `<res>/entities/base` | 负责entity不影响周围空间的部分 (以及表现为玩家proxy). 相关处理发生在服务器集群上。
+Client | `<res>/entities/client` | 负责对周围环境需要重度感知的实体部分。
 
 有些entity实例只具有3个部分中的一个也是可以的。此外，有些entity类型可能不支持具有这些部分中的一个。对每个entity类型而言，如果这类型支持对应的可执行上线文的话，在CellApp、BaseApp、Client都会有一个对应的脚本文件。  
 这些脚本文件以entity类型名加`.py`扩展名命名。这个文件必须包含一个名字为entity类型名的类。  
-For example, if you have an entity type Seat that can have cell, base and client execution
-contexts, there would be three script files, each with the implementation of the class:
-􀂃 <res>/entities/cell/Seat.py
-􀂃 <res>/entities/base/Seat.py
-􀂃 <res>/entities/client/Seat.py
+例如，如果你有一个entity类型`Avatar`，它拥有cell,base和client的处理上下文，将会有3个脚本文件，每一个都有相关类的实现: 
+
+* `<res>/entities/cell/Avatar.py`
+* `<res>/entities/base/Avatar.py`
+* `<res>/entities/client/Avatar.py`  
+
 The entityʹs base class defined in the script file is determined by the execution context that
 the file represents, as described below:
 
