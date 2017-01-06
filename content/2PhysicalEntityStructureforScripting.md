@@ -85,13 +85,37 @@ Client | `<res>/entities/client` | 负责对周围环境需要重度感知的实
 
 The entityʹs base class defined in the script file is determined by the execution context that
 the file represents, as described below:
+定义在脚本文件中的entity基类有其所在的执行上下文确定，描述如下：
 
-Script file
-execution context
-Entity's base class
-Cell BigWorld.Entity
-Base BigWorld.Base or BigWorld.Proxy
-Client BigWorld.Entity
-Entity's base class per execution context
-For more details about the difference between the Base and Proxy classes, see Proxies and
-Players on page 85.
+脚本文件执行上下文 | entity基类
+- | -
+Cell | KBEngine.Entity
+Base | KBEngine.Base或BigWorld.Proxy
+Client | KBEngine.Entity或自定义的协议
+
+关于Client，如果KBE提供了python执行上下文的客户端，那么是BigWorld.Entity，否则可以自己对接KBE引擎，实现自己的Entity脚本体系，可以参照KBE的unity插件。  
+更多关于Base和Proxy基类的细节，请查看章节`<Proxies和Players>`。
+
+例如一个Seat entity脚本实现可以开始如下：
+
+* Cell脚本文件`<res>/entities/cell/Seat.py`
+```
+import KBEngine
+
+class Seat( KBEngine.Entity ):
+	def __init__( self ):
+		KBEngine.Entity.__init__( self )
+```
+
+* Base脚本文件`<res>/entities/base/Seat.py`
+```
+import KBEngine
+
+class Seat( KBEngine.Base ):
+	def __init__( self ):
+		KBEngine.Base.__init__( self )
+```
+
+* Client脚本文件
+```
+```
