@@ -1,49 +1,36 @@
- 3. Properties
-Properties describe what the state of an entity is. Like traditional object systems, a BigWorld property has a type and a name. Unlike traditional object systems, a property also has distribution properties that affect where and how frequently it is distributed around the system.
-Properties are declared in the entityʹs definition file1, on a section named Properties. The table below describes the grammar for property definition:
+## 3. 属性
+属性描述了entity的状态。和传统的对象系统一样，一个KBE属性有类型和名字，不同的是，属性也具有属性，描述自身会分布在何处和在系统中分发的频率（存疑）。  
+属性被声明在entity的def文件中，在`<Properties>`段。如下表格描述了property的定义语法：  
 
 ```
- 
-<root> ...
-<Properties>
-<propertyName>
-<!-- type of this property -->
-TYPE_NAME </Type>
-<!-- Method of distribution -->
-<Flags> DISTRIBUTION_FLAGS </Flags> <!-- Default value (optional) -->
-<Default> DEFAULT_VALUE </Default>
-<!-- Is the property editable? (true/false) (optional) -->
-<Editable> [true|false] </Editable>
-<!-- Level of detail for this property (optional) -->
-LOD </DetailLevel> <!-- Is the property persistent? -->
-<Persistent> [true|false] </Persistent> </propertyName>
-</Properties>
-... </root>
- 
- <Type>
-For details, see Property types on page 19.
-      
-      
- For details, see Data distribution on page 27.
-        
-       
-       
- For details, see Property types, Default values on page 26.
- 
- 
- 
- 
- 
- 
-            
-<DetailLevel>
-For details, see LoD (Level of detail) on properties on page 38.
-            
-            
- 
-                        
-For details, see The Database Layer on page 71.
-  
- 
+<root> 
+	...
+	<Properties>
+		<propertyName> 
+			<!-- 属性的类型 -->
+			<Type> TYPE_NAME </Type> 
+			
+			<!-- 分布方式 -->
+			<Flags> DISTRIBUTION_FLAGS </Flags> 
 
+			<!-- 默认值 (可选) -->
+			<Default> DEFAULT_VALUE </Default>
+
+			<!-- 这个属性的LOD (可选) -->
+			<DetailLevel> LOD </DetailLevel> 
+
+			<!-- 是否持久化 -->
+			<Persistent> [true|false] </Persistent> 
+		</propertyName>
+	</Properties>
+	... 
+</root>
 ```
+
+3.1. Property types
+BigWorld needs to efficiently transmit data over a network between its various components.
+For this purpose, BigWorld definition file describes the type of each property of an entity
+(despite the fact that BigWorld is scripted using Python—an untyped language).
+Because bandwidth conservation is important in implementing an MMOG, property types
+should be selected such that they are the smallest type (in terms of number of bits) that can
+represent the data.
