@@ -69,10 +69,9 @@ N * t + K
 * t.........array中的类型大小
 * k.........常数
 
-The BigWorld TUPLE type is represented in script by the Python tuple type, while the
-BigWorld ARRAY type is represented in script by Python list type.
-Tuples are specified as follows:
-<Type> TUPLE <of> [TYPE_NAME|TYPE_ALIAS] </of> [<size> n </size>] </Type>
+KBE TUPLE类型在python脚本中表现为tuple类型，而ARRAY类型对应python脚本中的list类型。  
+Tuple的定义方式如下：  
+`<Type> TUPLE <of> [TYPE_NAME|TYPE_ALIAS] </of> [<size> n </size>] </Type>`
 <res>/entities/defs/<entity>.def—TUPLE declaration syntax
 Arrays are specified as follows:
 <Type> ARRAY <of> [TYPE_NAME|TYPE_ALIAS] </of> [<size> n </size>] </Type>
