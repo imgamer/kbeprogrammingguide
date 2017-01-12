@@ -71,14 +71,51 @@ N * t + K
 
 KBE TUPLE类型在python脚本中表现为tuple类型，而ARRAY类型对应python脚本中的list类型。  
 Tuple的定义方式如下：  
-`<Type> TUPLE <of> [TYPE_NAME|TYPE_ALIAS] </of> [<size> n </size>] </Type>`
-<res>/entities/defs/<entity>.def—TUPLE declaration syntax
-Arrays are specified as follows:
-<Type> ARRAY <of> [TYPE_NAME|TYPE_ALIAS] </of> [<size> n </size>] </Type>
-<res>/entities/defs/<entity>.def—ARRAY declaration syntax
-In case the size of ARRAY or TUPLE is specified, then it must have the declared n elements.
-Adding or deleting elements to fixed‐sized ARRAY or TUPLE is not allowed. If the default
-value is not specified, then a fixed‐sized ARRAY or TUPLE will contain n default values of
-the element type.
-Arrays not only can contain aliased data types, but also can be aliased themselves. For more
-details, see Alias of data types on page 24.
+`<Type> TUPLE <of> [TYPE_NAME|TYPE_ALIAS] </of> [<size> n </size>] </Type>`  
+Array的定义方式如下:
+`<Type> ARRAY <of> [TYPE_NAME|TYPE_ALIAS] </of> [<size> n </size>] </Type>`  
+
+一旦定义了ARRAY和TUPLE的长度，属性就必须声明n个元素。从固定长度ARRAY或TUPLE增加或删除元素都是不被允许的。如果初始值没有被指定，固定长度ARRAY或TUPLE则会包含n个所定义元素类型的默认值。  
+Array不仅能够包含别名(alias)数据类型，自身也能够被定义别名。更多细节请看`数据类型的别名`章节。
+
+
+
+3.1.2.2. FIXED_DICT data type
+The FIXED_DICT data type allows you to define dictionary‐like attributes with a fixed set
+of string keys. The keys and the types of the keyed values are predefined.
+The declaration of a FIXED_DICT is illustrated below:
+<Type> FIXED_DICT
+?<Parent> ParentFixedDictTypeDeclaration </Parent>
+<Properties>
++<field>
+<Type> FieldTypeDeclaration </Type>
+</field>
+</Properties>
+?<AllowNone> true|false </AllowNone>
+</Type>
+FIXED_DICT data type declaration
+This data type may be declared anywhere a type declaration may appear, e.g., in <res>/
+entitites/defs/alias.xml1, in <res>/entitites/defs/<entity>.def, as
+method call arguments, etc.
+The code excerpt below shows the declaration of a FIXED_DICT attribute:
+<root>
+<TradeLog> FIXED_DICT
+<Properties>
+<dbIDA>
+<Type> INT64 </Type>
+</dbIDA>
+<itemsTypesA>
+<Type> ARRAY <of> ITEM </of> </Type>
+</itemsTypesA>
+<goldPiecesA>
+<Type> GOLDPIECES </Type>
+</goldPiecesA>
+</Properties>
+</TradeLog>
+</root>
+fantasydemo/res/entities/defs/alias.xml
+Instances of FIXED_DICT can be accessed and modified like a Python dictionary, with the
+following exceptions:
+􀂃 Keys cannot be added or deleted
+􀂃 The type of the value must match the declaration.
+
