@@ -79,20 +79,22 @@ Array的定义方式如下:
 Array不仅能够包含别名(alias)数据类型，自身也能够被定义别名。更多细节请看`数据类型的别名`章节。
 
 
+3.1.2.2. 固定字典(FIXED_DICT)数据类型
+固定字典数据类型允许你使用字符串做为key的固定集合定义类字典属性。key和key的类型是提前定义好的。  
+固定字典的声明如下所示：  
 
-3.1.2.2. FIXED_DICT data type
-The FIXED_DICT data type allows you to define dictionary‐like attributes with a fixed set
-of string keys. The keys and the types of the keyed values are predefined.
-The declaration of a FIXED_DICT is illustrated below:
+```
 <Type> FIXED_DICT
-?<Parent> ParentFixedDictTypeDeclaration </Parent>
-<Properties>
-+<field>
+	<Parent> ParentFixedDictTypeDeclaration </Parent>
+	<Properties>
+	<field>
 <Type> FieldTypeDeclaration </Type>
 </field>
 </Properties>
 ?<AllowNone> true|false </AllowNone>
 </Type>
+```
+
 FIXED_DICT data type declaration
 This data type may be declared anywhere a type declaration may appear, e.g., in <res>/
 entitites/defs/alias.xml1, in <res>/entitites/defs/<entity>.def, as
@@ -119,3 +121,6 @@ following exceptions:
 􀂃 Keys cannot be added or deleted
 􀂃 The type of the value must match the declaration.
 
+2017-1-13
+当前KBE不允许在<entity>.def中直接声明FIXED_DICT数据类型。
+ARRAY、TUPLE、FIXED_DICT在声明属性时无法指定默认值。
