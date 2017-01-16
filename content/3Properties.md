@@ -87,40 +87,75 @@ Array不仅能够包含别名(alias)数据类型，自身也能够被定义别�
 <Type> FIXED_DICT
 	<Parent> ParentFixedDictTypeDeclaration </Parent>
 	<Properties>
-	<field>
-<Type> FieldTypeDeclaration </Type>
-</field>
-</Properties>
-?<AllowNone> true|false </AllowNone>
+		<field>
+		<Type> FieldTypeDeclaration </Type>
+		</field>
+	</Properties>
+	<AllowNone> true|false </AllowNone>
 </Type>
 ```
+说明如下：
+`<Parent>`是可选的，可以继承其他FIXED_DICT；`<AllowNone>`是可选的，默认值为false，如果设为true，则整个FIXED_DICT可以为None；`</field>`可以有多个。FIXED_DICT会在`<res>/entities/entity_defs/alias.xml`中被声明。  
+（2017-1-13）当前KBE不允许在`<entity>.def`的方法参数中直接声明FIXED_DICT数据类型（BigWorld可以），ARRAY、TUPLE、FIXED_DICT在声明属性时无法指定默认值。
 
-FIXED_DICT data type declaration
-This data type may be declared anywhere a type declaration may appear, e.g., in <res>/
-entitites/defs/alias.xml1, in <res>/entitites/defs/<entity>.def, as
-method call arguments, etc.
-The code excerpt below shows the declaration of a FIXED_DICT attribute:
+以下的代码片段展示了FIXED_DICT的属性声明：
+```
 <root>
-<TradeLog> FIXED_DICT
-<Properties>
-<dbIDA>
-<Type> INT64 </Type>
-</dbIDA>
-<itemsTypesA>
-<Type> ARRAY <of> ITEM </of> </Type>
-</itemsTypesA>
-<goldPiecesA>
-<Type> GOLDPIECES </Type>
-</goldPiecesA>
-</Properties>
-</TradeLog>
+	<TradeLog> FIXED_DICT
+	<Properties>
+		<dbIDA>
+			<Type> INT64 </Type>
+		</dbIDA>
+		<itemsTypesA>
+			<Type> ARRAY <of> ITEM </of> </Type>
+		</itemsTypesA>
+		<goldPiecesA>
+			<Type> GOLDPIECES </Type>
+		</goldPiecesA>
+	</Properties>
+	</TradeLog>
 </root>
-fantasydemo/res/entities/defs/alias.xml
-Instances of FIXED_DICT can be accessed and modified like a Python dictionary, with the
-following exceptions:
-􀂃 Keys cannot be added or deleted
-􀂃 The type of the value must match the declaration.
+```
+FIXED_DICT实例能够像一个Python字典那样被访问和修改，限制如下：  
 
-2017-1-13
-当前KBE不允许在<entity>.def中直接声明FIXED_DICT数据类型。
-ARRAY、TUPLE、FIXED_DICT在声明属性时无法指定默认值。
+* 无法增加或删除key
+* value的类型必须和声明匹配。  
+
+例如：  
+```
+if (entity.TradeLog[ "dbIDA" ] == 0):
+	entity.TradeLog[ "dbIDA" ] = 100
+```
+
+
+When setting a FIXED_DICT instance using a Python dictionary, the values of the Python
+dictionary are referenced by the FIXED_DICT instance.
+NOTE
+When setting a FIXED_DICT instance using a Python
+dictionary in the BaseApp, the Python dictionary replaces the
+FIXED_DICT instance. Thus, the entire Python dictionary is
+being referenced, not just its values.
+It also results in the possibility of a supposed FIXED_DICT
+attribute having more keys than in its declaration.
+This BaseApp behaviour may be changed in a future release
+of BigWorld so that it matches the rest of the system.
+Changes to FIXED_DICT values are propagated efficiently wherever a change to the whole
+property would be propagated, i.e., to ghosts and to clients—including ownClients.
+The default value of a FIXED_DICT data type can be specified at the entity property level.
+For example:
+<root>
+<Properties> FIXED_DICT
+<someProperty>
+<Type> TradeLog </Type> <!-- From last example -->
+<Default>
+<dbIDA> 0 </dbIDA>
+<itemsTypesA>
+<item> 101 </item>
+<item> 102 </item>
+</itemsTypesA>
+<goldPiecesA> 100 </goldPiecesA>
+</Default>
+</someProperty>
+</Properties>
+</root>
+Example of specifying default value of a FIXED_DICT data type in an entity definition file
