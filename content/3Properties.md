@@ -127,20 +127,17 @@ if (entity.TradeLog[ "dbIDA" ] == 0):
 	entity.TradeLog[ "dbIDA" ] = 100
 ```
 
+当使用一个Python字典来设置一个FIXED_DICT实例，Python字典的值会被FIXED_DICT实例引用。  
 
-When setting a FIXED_DICT instance using a Python dictionary, the values of the Python
-dictionary are referenced by the FIXED_DICT instance.
-NOTE
-When setting a FIXED_DICT instance using a Python
-dictionary in the BaseApp, the Python dictionary replaces the
-FIXED_DICT instance. Thus, the entire Python dictionary is
-being referenced, not just its values.
-It also results in the possibility of a supposed FIXED_DICT
-attribute having more keys than in its declaration.
-This BaseApp behaviour may be changed in a future release
-of BigWorld so that it matches the rest of the system.
-Changes to FIXED_DICT values are propagated efficiently wherever a change to the whole
-property would be propagated, i.e., to ghosts and to clients—including ownClients.
+```
+注意（BigWorld 1.8.7）：  
+在BaseApp上，当使用Python字典来设置一个FIXED_DICT实例时（直接赋值给FIXED_DICT属性）
+，实际效果是Python字典替换了FIXED_DICT对象。而且，整个Python字典被引用了，不仅仅
+是它里面的value。实际效果是假定FIXED_DICT属性比所声明的拥有更多的key。这个特别的
+BaseApp行为在未来的版本将会被修改和其它系统行为一样。
+```
+FIXED_DICT的value值修改会被高效的分发传输，无论在何处对整个属性的修改将会触发分发传输，例如，目标是ghost和client(有ownClients标签)。  
+
 The default value of a FIXED_DICT data type can be specified at the entity property level.
 For example:
 <root>
@@ -159,3 +156,41 @@ For example:
 </Properties>
 </root>
 Example of specifying default value of a FIXED_DICT data type in an entity definition file
+
+If the <Default> section is not specified, then the default value of a FIXED_DICT data
+type is described by following the table:
+<AllowNone> FIXED_DICT default value
+True Python None object.
+False Python dictionary with keys as specified in the type definition.
+Each keyed value will have a default value according to its type. For example, a
+keyed value of INT type will have a default value of 0.
+Default values for a FIXED_DICT without a <Default> section
+
+
+
+3.1.3. Custom user types
+There are two ways to incorporate user‐defined Python classes into BigWorld entities:
+wrapping a FIXED_DICT data type, or implementing a USER_TYPE.
+The FIXED_DICT data type supports being wrapped by a user‐defined Python type. When a
+FIXED_DICT is wrapped, BigWorld will instantiate the user‐defined Python type in place
+of a FIXED_DICT instance. This enables the user to customise the behaviour of a
+FIXED_DICT data type.
+The type system can also be arbitrarily extended with the USER_TYPE type. Unlike a
+wrapped FIXED_DICT type, the structure of a USER_TYPE type is completely opaque to
+BigWorld. As such, the implementation of a USER_TYPE type is more involved. The
+implementation of the type operations is performed by a Python object (such as an instance
+of a class) written by the user. The Python object serves as a factory and serialiser for
+instances of that type, and it can choose to use whatever Python representation of that type
+it sees fit—it can be as simple as an integer, or it can be an instance of a Python class.
+For more details on custom user types, see Implementing custom property data types on
+page 31.
+3.1.4. Alias of data types
+BigWorld also allows aliases of types to be created. Aliases are a concept similar to C++ʹs
+typedefs, and are listed in the XML file <res>/entities/defs/alias.xml. The
+format is described below:
+<root>
+... other alias definitions ...
+<ALIAS_NAME> TYPE_TO_ALIAS [<Default> Value </Default>1] </ALIAS_NAME>
+</root>
+<res>/entities/defs/alias.xml—Data type alias declaration syntax
+
