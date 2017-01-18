@@ -79,7 +79,7 @@ Array的定义方式如下:
 Array不仅能够包含别名(alias)数据类型，自身也能够被定义别名。更多细节请看`数据类型的别名`章节。
 
 
-3.1.2.2. 固定字典(FIXED_DICT)数据类型
+##### 3.1.2.2. 固定字典(FIXED_DICT)数据类型
 固定字典数据类型允许你使用字符串做为key的固定集合定义类字典属性。key和key的类型是提前定义好的。  
 固定字典的声明如下所示：  
 
@@ -96,7 +96,7 @@ Array不仅能够包含别名(alias)数据类型，自身也能够被定义别�
 ```
 说明如下：
 `<Parent>`是可选的，可以继承其他FIXED_DICT；`<AllowNone>`是可选的，默认值为false，如果设为true，则整个FIXED_DICT可以为None；`</field>`可以有多个。FIXED_DICT会在`<res>/entities/entity_defs/alias.xml`中被声明。  
-（2017-1-13）当前KBE不允许在`<entity>.def`的方法参数中直接声明FIXED_DICT数据类型（BigWorld可以），ARRAY、TUPLE、FIXED_DICT在声明属性时无法指定默认值。
+**（2017-1-13）当前KBE不允许在`<entity>.def`的方法参数中直接声明FIXED_DICT数据类型（BigWorld可以），ARRAY、TUPLE、FIXED_DICT在声明属性时无法指定默认值。**  
 
 以下的代码片段展示了FIXED_DICT的属性声明：
 ```
@@ -129,52 +129,24 @@ if (entity.TradeLog[ "dbIDA" ] == 0):
 
 当使用一个Python字典来设置一个FIXED_DICT实例，Python字典的值会被FIXED_DICT实例引用。  
 
-```
-注意（BigWorld 1.8.7）：  
-在BaseApp上，当使用Python字典来设置一个FIXED_DICT实例时（直接赋值给FIXED_DICT属性）
-，实际效果是Python字典替换了FIXED_DICT对象。而且，整个Python字典被引用了，不仅仅
-是它里面的value。实际效果是假定FIXED_DICT属性比所声明的拥有更多的key。这个特别的
-BaseApp行为在未来的版本将会被修改和其它系统行为一样。
-```
+>**注意（BigWorld 1.8.7）**：  
+>在BaseApp上，当使用Python字典来设置一个FIXED_DICT实例时（直接赋值给FIXED_DICT属性），实际效果是Python字典替换了FIXED_DICT对象。而且，整个Python字典被引用了，不仅仅是它里面的value。实际效果是假定FIXED_DICT属性比所声明的拥有更多的key。这个特别的BaseApp行为**在未来的版本将会被修改和其它组件系统行为一样**。
+
+
 FIXED_DICT的value值修改会被高效的分发传输，无论在何处对整个属性的修改将会触发分发传输，例如，目标是ghost和client(有ownClients标签)。  
 
-The default value of a FIXED_DICT data type can be specified at the entity property level.
-For example:
-<root>
-<Properties> FIXED_DICT
-<someProperty>
-<Type> TradeLog </Type> <!-- From last example -->
-<Default>
-<dbIDA> 0 </dbIDA>
-<itemsTypesA>
-<item> 101 </item>
-<item> 102 </item>
-</itemsTypesA>
-<goldPiecesA> 100 </goldPiecesA>
-</Default>
-</someProperty>
-</Properties>
-</root>
-Example of specifying default value of a FIXED_DICT data type in an entity definition file
+（当前未实现）如果没有定义`<Default>`块，FIXED_DICT数据类型的默认值如下表所示：  
 
-If the <Default> section is not specified, then the default value of a FIXED_DICT data
-type is described by following the table:
-<AllowNone> FIXED_DICT default value
-True Python None object.
-False Python dictionary with keys as specified in the type definition.
-Each keyed value will have a default value according to its type. For example, a
-keyed value of INT type will have a default value of 0.
-Default values for a FIXED_DICT without a <Default> section
+<AllowNone> | FIXED_DICT default value
+- | -
+True | Python None object.
+False | 已定义类型的python字典，每个key的value对应python类型的默认值。例如，INT类型的value默认值会是0.FIXED_DICT默认值没有<Default>块。
 
 
+#### 3.1.3. 用户自定义类型
+有2种方式把用户自定义的python类纳入(incorporate ... into)KBE实体:包装一个FIXED_DICT数据类型，或者实现一个USER_TYPE。  
+FIXED_DICT数据类型支持被用户定义的python类型包装。当一个FIXED_DICT被打包，KBE将实例化用户自定义python类型来替代FIXED_DICT实例。这是允许用户定制FIXED_DICT数据类型的行为。  
 
-3.1.3. Custom user types
-There are two ways to incorporate user‐defined Python classes into BigWorld entities:
-wrapping a FIXED_DICT data type, or implementing a USER_TYPE.
-The FIXED_DICT data type supports being wrapped by a user‐defined Python type. When a
-FIXED_DICT is wrapped, BigWorld will instantiate the user‐defined Python type in place
-of a FIXED_DICT instance. This enables the user to customise the behaviour of a
-FIXED_DICT data type.
 The type system can also be arbitrarily extended with the USER_TYPE type. Unlike a
 wrapped FIXED_DICT type, the structure of a USER_TYPE type is completely opaque to
 BigWorld. As such, the implementation of a USER_TYPE type is more involved. The
