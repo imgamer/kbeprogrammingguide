@@ -147,13 +147,8 @@ False | 已定义类型的python字典，每个key的value对应python类型的�
 有2种方式把用户自定义的python类纳入(incorporate ... into)KBE实体:包装一个FIXED_DICT数据类型，或者实现一个USER_TYPE。  
 FIXED_DICT数据类型支持被用户定义的python类型包装。当一个FIXED_DICT被打包，KBE将实例化用户自定义python类型来替代FIXED_DICT实例。这是允许用户定制FIXED_DICT数据类型的行为。  
 
-The type system can also be arbitrarily extended with the USER_TYPE type. Unlike a
-wrapped FIXED_DICT type, the structure of a USER_TYPE type is completely opaque to
-BigWorld. As such, the implementation of a USER_TYPE type is more involved. The
-implementation of the type operations is performed by a Python object (such as an instance
-of a class) written by the user. The Python object serves as a factory and serialiser for
-instances of that type, and it can choose to use whatever Python representation of that type
-it sees fit—it can be as simple as an integer, or it can be an instance of a Python class.
+类型系统能够使用USER_TYPE类型任意的扩展。和包装的FIXED_DICT类型不同，USER_TYPE类型的结构对KBE而言是完全黑盒的。因此，USER_TYPE类型的实现更复杂。操作类型的实现展示为一个用户实现的python对象（比如一个类的实例）。对类型实例而言，这个python对象行为就像是一个工厂和数据转换器，可以选择用什么python类型来表现更合适，可以简单的一个整型或者是一个python类的实例。
+
 For more details on custom user types, see Implementing custom property data types on
 page 31.
 3.1.4. Alias of data types
