@@ -147,17 +147,62 @@ False | 已定义类型的python字典，每个key的value对应python类型的�
 有2种方式把用户自定义的python类纳入(incorporate ... into)KBE实体:包装一个FIXED_DICT数据类型，或者实现一个USER_TYPE。  
 FIXED_DICT数据类型支持被用户定义的python类型包装。当一个FIXED_DICT被打包，KBE将实例化用户自定义python类型来替代FIXED_DICT实例。这是允许用户定制FIXED_DICT数据类型的行为。  
 
-类型系统能够使用USER_TYPE类型任意的扩展。和包装的FIXED_DICT类型不同，USER_TYPE类型的结构对KBE而言是完全黑盒的。因此，USER_TYPE类型的实现更复杂。操作类型的实现展示为一个用户实现的python对象（比如一个类的实例）。对类型实例而言，这个python对象行为就像是一个工厂和数据转换器，可以选择用什么python类型来表现更合适，可以简单的一个整型或者是一个python类的实例。
+类型系统能够使用USER_TYPE类型任意的扩展。和包装的FIXED_DICT类型不同，USER_TYPE类型的结构对KBE而言是完全黑盒的。因此，USER_TYPE类型的实现更复杂。操作类型的实现展示为一个用户实现的python对象（比如一个类的实例）。对类型实例而言，这个python对象行为就像是一个工厂和数据转换器，可以选择用什么python类型来表现更合适，可以简单的一个整型或者是一个python类的实例。  
+更多用户自定义类型的细节，请看`实现用户属性数据类型`章节。  
 
-For more details on custom user types, see Implementing custom property data types on
-page 31.
-3.1.4. Alias of data types
-BigWorld also allows aliases of types to be created. Aliases are a concept similar to C++ʹs
-typedefs, and are listed in the XML file <res>/entities/defs/alias.xml. The
-format is described below:
+#### 3.1.4. 数据类型别名
+KBE允许创建类型的别名。别名的概念类似C++的`typedef`，定义在`<res>/entities/defs/alias.xml`。格式如下：  
+```
 <root>
-... other alias definitions ...
-<ALIAS_NAME> TYPE_TO_ALIAS [<Default> Value </Default>1] </ALIAS_NAME>
+	... other alias definitions ...
+	<ALIAS_NAME> TYPE_TO_ALIAS [<Default> Value </Default>] </ALIAS_NAME>
 </root>
-<res>/entities/defs/alias.xml—Data type alias declaration syntax
+默认值的说明请看接下来的章节。
+```  
+
+使用的别名定义如下表：  
+
+别名(Alias) | 映射的类型 | 描述
+- | - | -
+ANGLE | FLOAT | 弧度值，表示角度
+BOOL | INT8 | 布尔类型（0表示fasle，非0表示true）。映射INT8, 最小的KBE类型。
+INFO | UINT16 | 关于任务(mission)的信息元素
+MISSION_STATS | ARRAY <of>INFO </of> | 任务信息数据元素的数组。这个是alias数组，同时它的元素类型也是alias类型。
+OBJECT_ID INT32 Handle to another entity. The name makes clear the property
+contains a handle to an entity.
+STATS_MATRIX ARRAY <of>
+MISSION_STATS
+</of>
+Matrix of mission information data elements (i.e., INFO type
+alias).
+Note that this is an aliased array, and the type of its elements
+is another aliased array.
+Useful data type aliases
+Using the syntax for alias definition to the aliases describe above, we have the following file:
+<root>
+<!-- Aliased data types -->
+<OBJECT_ID> INT32 </OBJECT_ID>
+<BOOL> INT8 </BOOL>
+<ANGLE> FLOAT </ANGLE>
+<INFO> UINT16 </INFO>
+<!-- Aliased arrays 􀃆
+<MISSION_STATS> ARRAY <of> INFO </of> </MISSION_STATS>
+<STATS_MATRIX> ARRAY <of> MISSION_STATS </of> </STATS_MATRIX>
+</root>
+<res>/entities/defs/alias.xml—Definition of data type alias
+With aliases, one can also define custom Python data types, which have their own streaming
+semantics on the network. We declare these types in the file <res>/entities/defs/
+alias.xml file as follows:
+<root>
+<ALIAS_NAME>
+USER_TYPE
+<implementedBy> UserDataType.instance </implementedBy>
+</ALIAS_NAME>
+</root>
+<res>/entities/defs/alias.xml—Custom Python data type declaration syntax
+For more details on this mechanism, see Implementing custom property data types on page
+31.
+
+
+
 
