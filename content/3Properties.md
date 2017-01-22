@@ -168,28 +168,24 @@ ANGLE | FLOAT | 弧度值，表示角度
 BOOL | INT8 | 布尔类型（0表示fasle，非0表示true）。映射INT8, 最小的KBE类型。
 INFO | UINT16 | 关于任务(mission)的信息元素
 MISSION_STATS | ARRAY <of>INFO </of> | 任务信息数据元素的数组。这个是alias数组，同时它的元素类型也是alias类型。
-OBJECT_ID INT32 Handle to another entity. The name makes clear the property
-contains a handle to an entity.
-STATS_MATRIX ARRAY <of>
-MISSION_STATS
-</of>
-Matrix of mission information data elements (i.e., INFO type
-alias).
-Note that this is an aliased array, and the type of its elements
-is another aliased array.
-Useful data type aliases
-Using the syntax for alias definition to the aliases describe above, we have the following file:
+OBJECT_ID | INT32 | 另一个entity的句柄。命名明确的反映了属性包含一个entity的句柄。
+STATS_MATRIX | ARRAY <of> MISSION_STATS </of> | 任务信息数据元素的二维数组。注意这是一个别名的数组，它的元素是一个其它别名的数组。嵌套别名。
+
+由以上的别名说明，定义别名的语法如以下文件(`<res>/entities/entity_defs/alias.xml`)：
+```
 <root>
-<!-- Aliased data types -->
-<OBJECT_ID> INT32 </OBJECT_ID>
-<BOOL> INT8 </BOOL>
-<ANGLE> FLOAT </ANGLE>
-<INFO> UINT16 </INFO>
-<!-- Aliased arrays 􀃆
-<MISSION_STATS> ARRAY <of> INFO </of> </MISSION_STATS>
-<STATS_MATRIX> ARRAY <of> MISSION_STATS </of> </STATS_MATRIX>
+	<!-- Aliased data types -->
+	<OBJECT_ID> INT32 </OBJECT_ID>
+	<BOOL> INT8 </BOOL>
+	<ANGLE> FLOAT </ANGLE>
+	<INFO> UINT16 </INFO>
+	
+	<!-- Aliased arrays -->
+	<MISSION_STATS> ARRAY <of> INFO </of> </MISSION_STATS>
+	<STATS_MATRIX> ARRAY <of> MISSION_STATS </of> </STATS_MATRIX>
 </root>
-<res>/entities/defs/alias.xml—Definition of data type alias
+```
+
 With aliases, one can also define custom Python data types, which have their own streaming
 semantics on the network. We declare these types in the file <res>/entities/defs/
 alias.xml file as follows:
@@ -199,6 +195,8 @@ USER_TYPE
 <implementedBy> UserDataType.instance </implementedBy>
 </ALIAS_NAME>
 </root>
+```
+
 <res>/entities/defs/alias.xml—Custom Python data type declaration syntax
 For more details on this mechanism, see Implementing custom property data types on page
 31.
