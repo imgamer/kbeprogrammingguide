@@ -186,21 +186,70 @@ STATS_MATRIX | ARRAY <of> MISSION_STATS </of> | 任务信息数据元素的二�
 </root>
 ```
 
-With aliases, one can also define custom Python data types, which have their own streaming
-semantics on the network. We declare these types in the file <res>/entities/defs/
-alias.xml file as follows:
+还能使用别名来自定义python数据类型，其在网络上有自己的流语义（streaming semantics）。这些类型在文件`<res>/entities/entity_defs/alias.xml`中被声明，语法如下：  
+```
 <root>
-<ALIAS_NAME>
-USER_TYPE
-<implementedBy> UserDataType.instance </implementedBy>
-</ALIAS_NAME>
+	<ALIAS_NAME>	USER_TYPE
+		<implementedBy> UserDataType.instance </implementedBy>
+	</ALIAS_NAME>
 </root>
 ```
-
-<res>/entities/defs/alias.xml—Custom Python data type declaration syntax
-For more details on this mechanism, see Implementing custom property data types on page
-31.
+有关这个机制的更多细节，请看用户属性数据类型实现的相关章节。
 
 
-
+### 3.2. 默认值
+When an entity is created, its properties are initialised to their default values. Default values
+can be overridden at the property level (in the entity definition file1) or at the type level (in
+alias.xml2).
+The default value for each type and the syntax for overriding it are described below:
+Data type Default Example
+ARRAY [] <Default>C
+<item> Health potion </item>
+<item> Bear skin </item>
+<item> Wooden shield </item>
+</Default
+BLOB '' <Default> SGVsbG8gV29ybGQhB </Default>
+<!-- Hello World! -->
+FIXED_DICT For details, see FIXED_DICT data type on page 22.
+INT8
+INT16
+INT32
+INT64
+0 <Default> 99 </Default>
+MAILBOX None Default value cannot be overridden.
+PYTHON None <Default>
+{ "Strength": 90, "Agility": 77 }
+</Default>
+STRING '' <Default> Hello World! </Default>A
+TUPLE () See ARRAY data type
+UINT8
+UINT16
+UINT32
+UINT64
+0 <Default> 99 </Default>
+USER_TYPE Return value of the userdefined
+defaultValue()
+function.
+<Default>
+<intVal> 100 </intVal>
+<strVal> opposites </stringVal>
+<dictVal>
+<value>
+<key> good </key>
+<value> bad </value>
+</value>
+</dictValue>
+</Default>
+VECTOR2 <Default> 3.142 2.71 </Default>
+VECTOR3 <Default> 3.142 2.71 1.4 </Default>
+VECTOR4
+PyVector of 0.0 of the
+appropriate length.
+<Default> 3.142 2.71 1.4 3.8 </Default>
+A Value must be specified without quotes.
+B BASE6-encoded string value must be specified.
+C Constructs the equivalent Python list [ 'Health potion', 'Bear skin', 'Wooden shield' ].
+Default value per data type
+1 For details, see introduction to this chapter on page 19.
+2 For details on grammar, see the document File Grammar Guide, section alias.xml.
 
