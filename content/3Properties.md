@@ -197,13 +197,14 @@ STATS_MATRIX | ARRAY <of> MISSION_STATS </of> | 任务信息数据元素的二�
 有关这个机制的更多细节，请看用户属性数据类型实现的相关章节。
 
 
-### 3.2. 默认值
-When an entity is created, its properties are initialised to their default values. Default values
-can be overridden at the property level (in the entity definition file1) or at the type level (in
-alias.xml2).
-The default value for each type and the syntax for overriding it are described below:
-Data type Default Example
-ARRAY [] <Default>C
+### ~~3.2. 默认值（未实现）~~
+当entity被创建，它的属性会被初始化为默认值。默认值能够在属性级别(对应的def文件)或者类型声明级别(`alias.xml`中)被覆写。  
+每个类型的默认值和覆写语法如下：  
+（略）
+
+数据类型 | 默认值 | 例子
+- | - | -
+ARRAY | [] | <Default>C
 <item> Health potion </item>
 <item> Bear skin </item>
 <item> Wooden shield </item>
