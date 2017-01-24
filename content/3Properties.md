@@ -204,49 +204,21 @@ STATS_MATRIX | ARRAY <of> MISSION_STATS </of> | 任务信息数据元素的二�
 
 数据类型 | 默认值 | 例子
 - | - | -
-ARRAY | [] | <Default>C
-<item> Health potion </item>
-<item> Bear skin </item>
-<item> Wooden shield </item>
-</Default
-BLOB '' <Default> SGVsbG8gV29ybGQhB </Default>
-<!-- Hello World! -->
-FIXED_DICT For details, see FIXED_DICT data type on page 22.
-INT8
-INT16
-INT32
-INT64
-0 <Default> 99 </Default>
-MAILBOX None Default value cannot be overridden.
-PYTHON None <Default>
-{ "Strength": 90, "Agility": 77 }
-</Default>
-STRING '' <Default> Hello World! </Default>A
-TUPLE () See ARRAY data type
-UINT8
-UINT16
-UINT32
-UINT64
-0 <Default> 99 </Default>
-USER_TYPE Return value of the userdefined
-defaultValue()
-function.
-<Default>
-<intVal> 100 </intVal>
-<strVal> opposites </stringVal>
-<dictVal>
-<value>
-<key> good </key>
-<value> bad </value>
-</value>
-</dictValue>
-</Default>
-VECTOR2 <Default> 3.142 2.71 </Default>
-VECTOR3 <Default> 3.142 2.71 1.4 </Default>
-VECTOR4
-PyVector of 0.0 of the
-appropriate length.
-<Default> 3.142 2.71 1.4 3.8 </Default>
+ARRAY | [] | `<Default>`<br>`<item> Health potion </item>`<br>`<item> Bear skin </item>`<br>`<item> Wooden shield </item>`<br>`</Default>`
+BLOB | '' | `<Default> SGVsbG8gV29ybGQhB </Default>`
+FIXED_DICT | 见前面的章节说明
+INT8 | 0 | `<Default> 99 </Default>`
+INT16 | 同上
+INT32 | 同上
+INT64 | 同上
+MAILBOX | None | 默认值不可覆写
+PYTHON | None | `<Default>`<br>`{ "Strength": 90, "Agility": 77 }`<br>`</Default>`
+STRING | '' | `<Default> Hello World! </Default>`
+TUPLE | () | See ARRAY data type
+USER_TYPE | 用户自定义的defaultValue()返回值 | 类似FIXED_DICT，可嵌套FIXED_DICT
+VECTOR2 | 长度为2，值为0.0的PyVector | `<Default> 3.142 2.71 </Default>`
+VECTOR3 | 长度为3，值为0.0的PyVector | `<Default> 3.142 2.71 1.4 </Default>`
+VECTOR4 | 长度为4，值为0.0的PyVector | `<Default> 3.142 2.71 1.4 3.8 </Default>`
 A Value must be specified without quotes.
 B BASE6-encoded string value must be specified.
 C Constructs the equivalent Python list [ 'Health potion', 'Bear skin', 'Wooden shield' ].
