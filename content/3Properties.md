@@ -204,8 +204,8 @@ STATS_MATRIX | ARRAY <of> MISSION_STATS </of> | 任务信息数据元素的二�
 
 数据类型 | 默认值 | 例子
 - | - | -
-ARRAY | [] | `<Default>`<br>`<item> Health potion </item>`<br>`<item> Bear skin </item>`<br>`<item> Wooden shield </item>`<br>`</Default>`
-BLOB | '' | `<Default> SGVsbG8gV29ybGQhB </Default>`
+ARRAY | [] | `<Default>`<br>`<item> Health potion </item>`<br>`<item> Bear skin </item>`<br>`<item> Wooden shield </item>`<br>`</Default>`[^1]
+BLOB | '' | `<Default> SGVsbG8gV29ybGQhB </Default>`[^2]
 FIXED_DICT | 见前面的章节说明
 INT8 | 0 | `<Default> 99 </Default>`
 INT16 | 同上
@@ -213,7 +213,7 @@ INT32 | 同上
 INT64 | 同上
 MAILBOX | None | 默认值不可覆写
 PYTHON | None | `<Default>`<br>`{ "Strength": 90, "Agility": 77 }`<br>`</Default>`
-STRING | '' | `<Default> Hello World! </Default>`
+STRING | '' | `<Default> Hello World! </Default>`[^3]
 TUPLE | () | See ARRAY data type
 USER_TYPE | 用户自定义的defaultValue()返回值 | 类似FIXED_DICT，可嵌套FIXED_DICT
 VECTOR2 | 长度为2，值为0.0的PyVector | `<Default> 3.142 2.71 </Default>`
@@ -225,4 +225,10 @@ C Constructs the equivalent Python list [ 'Health potion', 'Bear skin', 'Wooden 
 Default value per data type
 1 For details, see introduction to this chapter on page 19.
 2 For details on grammar, see the document File Grammar Guide, section alias.xml.
+
+
+[^1]: 等于python列表['Health potion', 'Bear skin', 'Wooden shield' ].
+[^2]: 基于base6编码的字符串必须被定义。
+[^3]: 值定义必须没有被引用。
+
 
