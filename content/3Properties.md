@@ -219,13 +219,215 @@ USER_TYPE | 用户自定义的defaultValue()返回值 | 类似FIXED_DICT，可�
 VECTOR2 | 长度为2，值为0.0的PyVector | `<Default> 3.142 2.71 </Default>`
 VECTOR3 | 长度为3，值为0.0的PyVector | `<Default> 3.142 2.71 1.4 </Default>`
 VECTOR4 | 长度为4，值为0.0的PyVector | `<Default> 3.142 2.71 1.4 3.8 </Default>`
-A Value must be specified without quotes.
-B BASE6-encoded string value must be specified.
-C Constructs the equivalent Python list [ 'Health potion', 'Bear skin', 'Wooden shield' ].
-Default value per data type
-1 For details, see introduction to this chapter on page 19.
-2 For details on grammar, see the document File Grammar Guide, section alias.xml.
 
+### 3.3. 数据分布
+Properties represent the state of an entity. Some states are only relevant to the cell, others only to the base, and yet others only to the client. Some states, however, are relevant to more than one of these.
+Each property then has a distribution type that specifies to BigWorld which execution context (cell, base, or client) is responsible for updating the property, and where to propagate its value within the system.
+Data distribution is set up by specifying the sub‐section <Flags> of the section <Properties> of the file <res>/entities/defs/<entity>.def.
+Entities can have up to 256 exposed properties (i.e., properties that exist both on client and server), with the efficient number being 61.
+The bit flags available are defined in src/lib/entitydef/data_description.hpp, and are described in the table below:
+Properties
+Flag
+RF
+EF
+Master value on
+ 
+Description
+ DATA_BASE
+ 
+ 
+Base
+ 
+Data will be updated on the base, and will not be available on the cell.
+ DATA_GHOSTED
+ 
+ 
+Cell
+ 
+Data will be updated on the cell, and will be ghosted on other cells.
+This means that it is safe to read the value of this property from another entity, because BigWorld safely makes it available even across cell boundaries.
+    
+ DATA_OTHER_CLIENT
+ 
+ 
+Cell
+ 
+Data will be updated on the cell, and made available to clients who have this entity in their AoI.
+This makes the property safe to read from the client for any entity, except for that client's player avatar entity. This flag is often combined with DATA_OWN_CLIENT to create a property that is distributed to all clients.
+        
+DATA_OWN_CLIENT
+ 
+ 
+ 
+Base, if DATA_BASE is set. Otherwise, on cell.
+ 
+Data is propagated to client owning this entity. This only makes sense with player entities.
+ 
+RF=Required flags, EF = Excluded flags
+Data distribution bit flags
+  27 of 177
+N/A DATA_GHOSTED N/A N/A
+N/A N/A
+DATA_BASE DATA_GHOSTED
+ Server Programming Guide
+The table below list the valid combinations of the above bit flags:
+        Available to:
+       Enumeration
+               Description
+  ALL_CLIENTSA
+    
+   
+  
+    
+   
+   
+   Property is available to all entities on cell and client. Corresponds to setting both OWN_CLIENT and OTHER_CLIENTS flags.
+Examples include:
+  The name of a player.
+  The health status of a player or a creature.
+       BASE
+    
+   
+  
+    
+   
+   
+   Property is only available on the base. Examples include:
+  List of members of a chat room.   Items in a character's inventory.
+     BASE_AND_CLIENT
+    
+   
+  
+    
+   
+   
+   Property is available on the base and on the owning client. Corresponds to setting both OWN_CLIENT and BASE flags.
+NOTE: Properties of this type are only synchronised when the client entity is created. Neither the client nor the base is automatically updated when property changes. Methods must be used to propagate new value, which is simple, since only one player needs to receive it.
+          CELL_PRIVATE
+    
+   
+  
+    
+   
+   
+   Property is only available to its entity, and only on cell. Examples include:
+  Properties of an NPCs 'thoughts' in AI algorithms.   Player properties relevant to game play, but
+dangerous to allow players to see (e.g., healing time after battle).
+       CELL_PUBLIC
+    
+   
+  
+    
+   
+   
+   Property is available only on the cell, and is available to other entities.
+Examples include:
+  The mana level of a player (which can be seen only by enemies, not by other players).
+  The call sign for grouping from enemy NPC.
+       CELL_PUBLIC_AND_OWN
+    
+   
+  
+    
+   
+   
+   Property is available to other entities on the cell, and to this one on both the cell and the client.
+Unlike OWN_CLIENT, this data is also ghosted, and therefore available to other entities on the cell.
+     DATA_EDITOR_ONLY
+    
+   
+  
+    
+   
+   
+   This value may be useful when using BigWorld.fetchEntitiesFromChunks1 from a BaseApp. It could be used to decide programmatically whether a particular entity should be loaded.
+For example, you may associate a level of difficulty with each entity, so entity will only be loaded if the mission's level of difficulty is high enough.
+           A When properties with this distribution flag are updated by server, an implicit method is called on client. For details, see Implicit set_<property_name> methods on page 46.
+         Data distribution constants (continues on next page...)
+1 For details on this function, see Python Base API documentation, entry Modules BigWorld
+28 of 177 Copyright 1999-2008 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
+  Other cells Cell
+Base
+Own client Other clients WorldEditor
+ Data distribution constants (...continued from previous page)
+Data distribution constants
+The table below lists the deprecated data distribution constants:
+Properties
+Available to:
+ 
+Enumeration
+ 
+ 
+ 
+ 
+ 
+ 
+Description
+OTHER_CLIENTSA
+ 
+ 
+ 
+ 
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Property is available from client to entities that are not this player's avatar. Also available on cell to other entities.
+Examples include:
+  The state of dynamic world items (e.g., doors, loot containers, and buttons).
+  The type of a particle system effect.
+  The player who is currently sitting on a seat.
+       
+OWN_CLIENTA
+  
+  
+  
+  
+  
+  
+ Property is only available to this entity, on both the cell and the client.
+Examples include:
+  The character class of a player.
+  Number of experience points for a player.
+    
+  A When properties with this distribution flag are updated by server, an implicit method is called on client. For details, see Implicit set_<property_name> methods on page 46.
+ 
+Deprecated enumeration
+ 
+Equivalent to
+ ALL_CLIENT
+ 
+ALL_CLIENTS
+ CELL
+ 
+CELL_PUBLIC
+ CELL_AND_OWN
+ 
+CELL_PUBLIC_AND_OWN
+ GHOSTED
+ 
+CELL_PUBLIC
+ GHOSTED_AND_OWN
+ 
+CELL_PUBLIC_AND_OWN
+ OTHER_CLIENT
+ 
+OTHER_CLIENTS
+ PRIVATE
+ CELL_PRIVATE
+Deprecated distribution constants
+When choosing a distribution flag for a property, consider the points described below:
+  Which methods need the property?
+You have to make the property available on an execution context (cell, base, or client) if
+that context has a method that manipulates the property.
+  Does this property need to be accessed by other entities?
+This could include methods being called to access its value. If this is the case, we need to
+make the property ghosted.
+When doing this, remember that the ghosted entitiesʹ properties may be a little ʹlaggedʹ, i.e., they may not represent the exact state of an entity at a given time. Also, remember that other entities can only read the property; only the entity that owns the property may change it.
 
 [^1]: 等于python列表['Health potion', 'Bear skin', 'Wooden shield' ].
 [^2]: 基于base6编码的字符串必须被定义。
