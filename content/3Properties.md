@@ -221,11 +221,12 @@ VECTOR3 | 长度为3，值为0.0的PyVector | `<Default> 3.142 2.71 1.4 </Defaul
 VECTOR4 | 长度为4，值为0.0的PyVector | `<Default> 3.142 2.71 1.4 3.8 </Default>`
 
 ### 3.3. 数据分布
-属性描述了entity的状态。有些状态只会和cell相关，有些和base相关，而有些只和客户端有关。除了以上，有些状态会和多于一个以上的部分相关。
-Properties represent the state of an entity. Some states are only relevant to the cell, others only to the base, and yet others only to the client. Some states, however, are relevant to more than one of these.
-Each property then has a distribution type that specifies to BigWorld which execution context (cell, base, or client) is responsible for updating the property, and where to propagate its value within the system.
-Data distribution is set up by specifying the sub‐section <Flags> of the section <Properties> of the file <res>/entities/defs/<entity>.def.
-Entities can have up to 256 exposed properties (i.e., properties that exist both on client and server), with the efficient number being 61.
+属性描述了entity的状态。有些状态只会和cell相关，有些和base相关，而有些只和客户端有关。除了以上，有些状态会和多于一个以上的部分相关。  
+每个属性有一个分布类型定义，以便确定在KBE中哪个执行上下文(cell, base或者client)负责更新，并把值传输到何处。  
+在文件`<res>/entities/defs/<entity>.def`的`<Properties>`子块中的`<Flags>`设置数据分布。  
+
+entity最多有256个exposed属性（如，属性同时存在于client和server），而不超过61个时是最好的。  
+
 The bit flags available are defined in src/lib/entitydef/data_description.hpp, and are described in the table below:
 Properties
 Flag
