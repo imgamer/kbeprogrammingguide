@@ -227,68 +227,20 @@ VECTOR4 | 长度为4，值为0.0的PyVector | `<Default> 3.142 2.71 1.4 3.8 </De
 
 entity最多有256个exposed属性（属性同时存在于client和server），而不超过61个时是最好的。  
 
-附BigWorld定义在源码`data_description.hpp`中的字节标记描述如下：
+附BigWorld定义在源码`data_description.hpp`中的数据分布字节标记描述如下：
 
 Flag | Required flags | Excluded flags | Master value on | Description
 - | - | - | - |-
 DATA_BASE | N/A | DATA_GHOSTED | Base | 数据在Base上更新，在Cell上不可用
 DATA_GHOSTED | N/A | DATA_BASE | Cell | 数据在Cell上更新并能够镜像（ghost）给其它Cell。<br>这意味着从其它entity上获取这个属性值是安全的。因为bw保证了跨Cell边界的安全使用。
+DATA_OTHER_CLIENT | DATA_GHOSTED | N/A | Cell | 数据在Cell上被更新，其它entity的AoI中拥有这个entity时，数据也会更新给它们的客户端。
+DATA_OWN_CLIENT | N/A | N/A | Base(如果设置了DATA_BASE)，否则Cell | 数据传输给这个entity对应的客户端。仅对player entity有效。
 
-The bit flags available are defined in src/lib/entitydef/data_description.hpp, and are described in the table below:
-Properties
-Flag
-RF
-EF
-Master value on
- 
-Description
- DATA_BASE
- 
- 
-Base
- 
-Data will be updated on the base, and will not be available on the cell.
- DATA_GHOSTED
- 
- 
-Cell
- 
-Data will be updated on the cell, and will be ghosted on other cells.
-This means that it is safe to read the value of this property from another entity, because BigWorld safely makes it available even across cell boundaries.
-    
- DATA_OTHER_CLIENT
- 
- 
-Cell
- 
-Data will be updated on the cell, and made available to clients who have this entity in their AoI.
-This makes the property safe to read from the client for any entity, except for that client's player avatar entity. This flag is often combined with DATA_OWN_CLIENT to create a property that is distributed to all clients.
-        
-DATA_OWN_CLIENT
- 
- 
- 
-Base, if DATA_BASE is set. Otherwise, on cell.
- 
-Data is propagated to client owning this entity. This only makes sense with player entities.
- 
-RF=Required flags, EF = Excluded flags
-Data distribution bit flags
-  27 of 177
-N/A DATA_GHOSTED N/A N/A
-N/A N/A
-DATA_BASE DATA_GHOSTED
- Server Programming Guide
 The table below list the valid combinations of the above bit flags:
         Available to:
        Enumeration
                Description
   ALL_CLIENTSA
-    
-   
-  
-    
-   
    
    Property is available to all entities on cell and client. Corresponds to setting both OWN_CLIENT and OTHER_CLIENTS flags.
 Examples include:
