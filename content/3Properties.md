@@ -225,7 +225,14 @@ VECTOR4 | 长度为4，值为0.0的PyVector | `<Default> 3.142 2.71 1.4 3.8 </De
 每个属性有一个分布类型定义，以便确定在KBE中哪个执行上下文(cell, base或者client)负责更新，并把值传输到何处。  
 在文件`<res>/entities/defs/<entity>.def`的`<Properties>`子块中的`<Flags>`设置数据分布。  
 
-entity最多有256个exposed属性（如，属性同时存在于client和server），而不超过61个时是最好的。  
+entity最多有256个exposed属性（属性同时存在于client和server），而不超过61个时是最好的。  
+
+附BigWorld定义在源码`data_description.hpp`中的字节标记描述如下：
+
+Flag | Required flags | Excluded flags | Master value on | Description
+- | - | - | - |-
+DATA_BASE | N/A | DATA_GHOSTED | Base | 数据在Base上更新，在Cell上不可用
+DATA_GHOSTED | N/A | DATA_BASE | Cell | 数据在Cell上更新并能够镜像（ghost）给其它Cell。<br>这意味着从其它entity上获取这个属性值是安全的。因为bw保证了跨Cell边界的安全使用。
 
 The bit flags available are defined in src/lib/entitydef/data_description.hpp, and are described in the table below:
 Properties
