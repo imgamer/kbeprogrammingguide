@@ -231,9 +231,9 @@ entity最多有256个exposed属性（属性同时存在于client和server），�
 
 Flag | Required flags | Excluded flags | Master value on | Description
 - | - | - | - |-
-DATA_BASE | N/A | DATA_GHOSTED | Base | 数据在Base上更新，在Cell上不可用
-DATA_GHOSTED | N/A | DATA_BASE | Cell | 数据在Cell上更新并能够镜像（ghost）给其它Cell。<br>这意味着从其它entity上获取这个属性值是安全的。因为bw保证了跨Cell边界的安全使用。
-DATA_OTHER_CLIENT | DATA_GHOSTED | N/A | Cell | 数据在Cell上被更新，其它entity的AoI中拥有这个entity时，数据也会更新给它们的客户端。
+DATA_BASE | N/A | DATA_GHOSTED | Base | 数据在Base上，在Cell上不可用
+DATA_GHOSTED | N/A | DATA_BASE | Cell | 数据在Cell上并能够镜像（ghost）给其它Cell。<br>这意味着从其它entity上获取这个属性值是安全的。因为bw保证了跨Cell边界的安全使用。
+DATA_OTHER_CLIENT | DATA_GHOSTED | N/A | Cell | 数据在Cell上，其它entity的AoI中拥有这个entity时，数据也会更新给它们的客户端。其它entity的客户端读取这个属性是安全的，除了这个数据所在Cell客户端上的player entity。这个标记经常和DATA_OWN_CLIENT组合使用来创建一个在所有客户端上分布的属性。
 DATA_OWN_CLIENT | N/A | N/A | Base(如果设置了DATA_BASE)，否则Cell | 数据传输给这个entity对应的客户端。仅对player entity有效。
 
 The table below list the valid combinations of the above bit flags:
