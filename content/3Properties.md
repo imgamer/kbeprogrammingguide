@@ -236,6 +236,8 @@ DATA_GHOSTED | N/A | DATA_BASE | Cell | 数据在Cell上并能够镜像（ghost�
 DATA_OTHER_CLIENT | DATA_GHOSTED | N/A | Cell | 数据在Cell上，其它entity的AoI中拥有这个entity时，数据也会更新给它们的客户端。其它entity的客户端读取这个属性是安全的，除了这个数据所在Cell客户端上的player entity。这个标记经常和DATA_OWN_CLIENT组合使用来创建一个在所有客户端上分布的属性。
 DATA_OWN_CLIENT | N/A | N/A | Base(如果设置了DATA_BASE)，否则Cell | 数据传输给这个entity对应的客户端。仅对player entity有效。
 
+下面列出了上表字节标志的有效组合：
+
 The table below list the valid combinations of the above bit flags:
         Available to:
        Enumeration
