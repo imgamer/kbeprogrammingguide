@@ -238,6 +238,16 @@ DATA_OWN_CLIENT | N/A | N/A | Base(如果设置了DATA_BASE)，否则Cell | 数�
 
 下面列出了上表字节标志的有效组合：
 
+* ALL_CLIENTS  
+属性对所有的cell entity及其client都是可见的。相当于同时设置了OWN_CLIENT和OTHER_CLIENT标记。例如玩家的名字属性，玩家或者一个creature的血条等。
+* BASE  
+属性只在Base上可见。例如，聊天房间列表，玩家仓库中的物品。  
+* BASE_AND_CLIENT  
+属性在Base和其对应的客户端可见。相当同时设置了BASE和OWN_CLIENT属性。注意：这个类型的属性只会在客户端entity创建时同步。当属性改变时，client和base都不会自动更新。需要定义一个方法来传输新值，只有一个玩家需要接收它，因此比较简单。  
+* CELL_PRIVATE  
+属性只在Cell上对其本身的entity可见。例如，NPC AI算法的思考数据；涉及游戏的玩家属性，但让其它玩家看见是危险的，例如战斗后的恢复时间。  
+
+
 The table below list the valid combinations of the above bit flags:
         Available to:
        Enumeration
