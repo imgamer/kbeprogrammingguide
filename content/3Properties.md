@@ -246,153 +246,17 @@ DATA_OWN_CLIENT | N/A | N/A | Base(如果设置了DATA_BASE)，否则Cell | 数�
 属性在Base和其对应的客户端可见。相当同时设置了BASE和OWN_CLIENT属性。注意：这个类型的属性只会在客户端entity创建时同步。当属性改变时，client和base都不会自动更新。需要定义一个方法来传输新值，只有一个玩家需要接收它，因此比较简单。  
 * CELL_PRIVATE  
 属性只在Cell上对其本身的entity可见。例如，NPC AI算法的思考数据；涉及游戏的玩家属性，但让其它玩家看见是危险的，例如战斗后的恢复时间。  
+* CELL_PUBLIC  
+属性在Cell上对自己和其它entity可见。例如，一个玩家的魔法级别（能够被敌人可见但不能被玩家客户端可见）；其它敌对NPC的呼叫范围。  
+* CELL_PUBLIC_AND_OWN  
+属性对Cell其它entity可见，同时对本身Cell和客户端也可见。与OWN_CLIENT不同，这个属性也可以被镜像，因此对Cell的其它entity可见。  
+* OTHER_CLIENTS
+属性对非自身entity的玩家客户端和Cell上的其它entity可见。例如，世界中动态物品的状态（一个门或者一个按钮）；粒子系统的效果类型；玩家当前是否坐在椅子上。   
+* OWN_CLIENT  
+属性仅对本entity的客户端和Cell可见。例如，玩家的角色类型；玩家的经验点数值。  
 
+注意：对于拥有ALL_CLIENTS,OTHER_CLIENTS,OWN_CLIENT等分布标记的属性，会隐性的触发一个客户端方法调用`set_<property_name>`，请参看下面的相关章节。  
 
-The table below list the valid combinations of the above bit flags:
-        Available to:
-       Enumeration
-               Description
-  ALL_CLIENTSA
-   
-   Property is available to all entities on cell and client. Corresponds to setting both OWN_CLIENT and OTHER_CLIENTS flags.
-Examples include:
-  The name of a player.
-  The health status of a player or a creature.
-       BASE
-    
-   
-  
-    
-   
-   
-   Property is only available on the base. Examples include:
-  List of members of a chat room.   Items in a character's inventory.
-     BASE_AND_CLIENT
-    
-   
-  
-    
-   
-   
-   Property is available on the base and on the owning client. Corresponds to setting both OWN_CLIENT and BASE flags.
-NOTE: Properties of this type are only synchronised when the client entity is created. Neither the client nor the base is automatically updated when property changes. Methods must be used to propagate new value, which is simple, since only one player needs to receive it.
-          CELL_PRIVATE
-    
-   
-  
-    
-   
-   
-   Property is only available to its entity, and only on cell. Examples include:
-  Properties of an NPCs 'thoughts' in AI algorithms.   Player properties relevant to game play, but
-dangerous to allow players to see (e.g., healing time after battle).
-       CELL_PUBLIC
-    
-   
-  
-    
-   
-   
-   Property is available only on the cell, and is available to other entities.
-Examples include:
-  The mana level of a player (which can be seen only by enemies, not by other players).
-  The call sign for grouping from enemy NPC.
-       CELL_PUBLIC_AND_OWN
-    
-   
-  
-    
-   
-   
-   Property is available to other entities on the cell, and to this one on both the cell and the client.
-Unlike OWN_CLIENT, this data is also ghosted, and therefore available to other entities on the cell.
-     DATA_EDITOR_ONLY
-    
-   
-  
-    
-   
-   
-   This value may be useful when using BigWorld.fetchEntitiesFromChunks1 from a BaseApp. It could be used to decide programmatically whether a particular entity should be loaded.
-For example, you may associate a level of difficulty with each entity, so entity will only be loaded if the mission's level of difficulty is high enough.
-           A When properties with this distribution flag are updated by server, an implicit method is called on client. For details, see Implicit set_<property_name> methods on page 46.
-         Data distribution constants (continues on next page...)
-1 For details on this function, see Python Base API documentation, entry Modules BigWorld
-28 of 177 Copyright 1999-2008 BigWorld Pty. Ltd. All rights reserved. Proprietary commercial in confidence.
-  Other cells Cell
-Base
-Own client Other clients WorldEditor
- Data distribution constants (...continued from previous page)
-Data distribution constants
-The table below lists the deprecated data distribution constants:
-Properties
-Available to:
- 
-Enumeration
- 
- 
- 
- 
- 
- 
-Description
-OTHER_CLIENTSA
- 
- 
- 
- 
-  
- 
- 
- 
- 
- 
- 
- 
-Property is available from client to entities that are not this player's avatar. Also available on cell to other entities.
-Examples include:
-  The state of dynamic world items (e.g., doors, loot containers, and buttons).
-  The type of a particle system effect.
-  The player who is currently sitting on a seat.
-       
-OWN_CLIENTA
-  
-  
-  
-  
-  
-  
- Property is only available to this entity, on both the cell and the client.
-Examples include:
-  The character class of a player.
-  Number of experience points for a player.
-    
-  A When properties with this distribution flag are updated by server, an implicit method is called on client. For details, see Implicit set_<property_name> methods on page 46.
- 
-Deprecated enumeration
- 
-Equivalent to
- ALL_CLIENT
- 
-ALL_CLIENTS
- CELL
- 
-CELL_PUBLIC
- CELL_AND_OWN
- 
-CELL_PUBLIC_AND_OWN
- GHOSTED
- 
-CELL_PUBLIC
- GHOSTED_AND_OWN
- 
-CELL_PUBLIC_AND_OWN
- OTHER_CLIENT
- 
-OTHER_CLIENTS
- PRIVATE
- CELL_PRIVATE
-Deprecated distribution constants
 When choosing a distribution flag for a property, consider the points described below:
   Which methods need the property?
 You have to make the property available on an execution context (cell, base, or client) if
