@@ -255,16 +255,25 @@ DATA_OWN_CLIENT | N/A | N/A | Base(如果设置了DATA_BASE)，否则Cell | 数�
 * OWN_CLIENT  
 属性仅对本entity的客户端和Cell可见。例如，玩家的角色类型；玩家的经验点数值。  
 
-注意：对于拥有ALL_CLIENTS,OTHER_CLIENTS,OWN_CLIENT等分布标记的属性，会隐性的触发一个客户端方法调用`set_<property_name>`，请参看下面的相关章节。  
+注意：对于拥有ALL_CLIENTS,OTHER_CLIENTS,OWN_CLIENT等分布标记的属性，会隐性的触发一个客户端方法调用`set_<property_name>`，请参看后面的相关章节。   
 
-When choosing a distribution flag for a property, consider the points described below:
-  Which methods need the property?
-You have to make the property available on an execution context (cell, base, or client) if
-that context has a method that manipulates the property.
-  Does this property need to be accessed by other entities?
-This could include methods being called to access its value. If this is the case, we need to
-make the property ghosted.
-When doing this, remember that the ghosted entitiesʹ properties may be a little ʹlaggedʹ, i.e., they may not represent the exact state of an entity at a given time. Also, remember that other entities can only read the property; only the entity that owns the property may change it.
+当为一个属性选择了分布标记，考虑以下几点：  
+
+* 那些方法需要这些属性？  
+如果相关的执行环境(cell, base, or client)有一个维护这个属性的方法，你必须在相关上下文让这个属性可用。  
+* 这个属性是否被其它entity访问？  
+这应该需要定义方法去访问属性值。如果是这样的情况，需要让这个属性能够被镜像(ghosted)。  
+需要注意，镜像entity的属性会有一点延迟，例如，在某个时刻，不能精确的描述一个entity的状态；同时，这个属性对于其它entity来说是只读的；只有拥有这个属性的entity能够改变它。
+* 客户端是否需要直接访问这个属性？  
+Client/server的带宽很宝贵，客户端能直接访问的属性要尽量小。  
+有时，cell维护的一组属性只需要发送由其衍生的额外属性给客户端。例如，客户端部分可能并不需要知道让一个守卫愤怒的6个AI状态变量组合，而只需要知道衍生的值：守卫挥舞着一把斧头。  
+* 玩家是否能获得这个属性来作弊？  
+要注意是否需要把这个属性发给客户端。  
+* 任何属性只能有一个主值。  
+主值必须是在base或者cell上。如果同样的属性需要在base和cell上可用，通常需要通过方法把属性返送给另外一端。
+
+
+
 
 [^1]: 等于python列表['Health potion', 'Bear skin', 'Wooden shield' ].
 [^2]: 基于base6编码的字符串必须被定义。
