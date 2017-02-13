@@ -270,10 +270,40 @@ Client/server的带宽很宝贵，客户端能直接访问的属性要尽量小�
 * 玩家是否能获得这个属性来作弊？  
 要注意是否需要把这个属性发给客户端。  
 * 任何属性只能有一个主值。  
-主值必须是在base或者cell上。如果同样的属性需要在base和cell上可用，通常需要通过方法把属性返送给另外一端。
+主值必须是在base或者cell上。如果同样的属性需要在base和cell上可用，通常需要通过方法把属性发送给另外一端。
 
 
+3.3.1. Data propagation
+Data propagation occurs when the entity is first created. Subsequent modifications to
+properties will only be local to the component, except when the modification occurs in a
+CellApp, in which case the change will be automatically propagated to all interested parties.
+For example, CELL_PUBLIC properties are propagated to all other CellApps that have a
+ghost of the entity, OTHER_CLIENTS properties are propagated to all clients that have the
+entity in their AoI, and so on.
+When changing the value of a property in a component other than a CellApp, the change
+can be manually propagated using remote method calls. For details, see Methods on page
+41.
 
+3.3.1.1. Forcing data propagation for Python and custom user types
+Changes to properties of PYTHON and custom user types are not automatically propagated,
+unless the property is reassigned.
+This behaviour mainly affects composite Python types like dictionaries, arrays, and classes,
+because modifications to the object do not cause data propagation unless the property is
+reassigned to itself.
+For example, if entity e has the property as illustrate below:
+<pythonProp>
+<Type> PYTHON </Type>
+...
+</pythonProp>
+Assigning pythonProp to a new value will cause data propagation:
+e.pythonProp = { 'gold': 100 }
+
+However, modifying the value will not cause data propagation:
+e.pythonProp[ 'gold' ] = 50
+e.pythonProp[ 'arrows' ] = 200
+Different parts of the entity will see different values for pythonProp, unless data
+propagation is manually triggered by reassigning the property back to itself:
+e.pythonProp = e.pythonProp
 
 [^1]: 等于python列表['Health potion', 'Bear skin', 'Wooden shield' ].
 [^2]: 基于base6编码的字符串必须被定义。
