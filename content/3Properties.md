@@ -272,24 +272,15 @@ Client/server的带宽很宝贵，客户端能直接访问的属性要尽量小�
 * 任何属性只能有一个主值。  
 主值必须是在base或者cell上。如果同样的属性需要在base和cell上可用，通常需要通过方法把属性发送给另外一端。
 
+#### 3.3.1. 数据传输
+当entity第一次创建时就会产生数据传输。随后对属性的修改将在组件的本地进行，除非在CellApp修改属性，这个修改会被自动传输给所有感兴趣的部分。例如，CELL_PUBLIC属性会被传输给所有其它拥有这个entity的ghost的CellApps，OTHER_CLIENTS属性将被传输给所有AoI中拥有这个entity的客户端，等等。  
+当属性不是在CellApp组件改变时，这个改变只能使用远程方法调用手动传输。更详细的处理见相关章节。  
 
-3.3.1. Data propagation
-Data propagation occurs when the entity is first created. Subsequent modifications to
-properties will only be local to the component, except when the modification occurs in a
-CellApp, in which case the change will be automatically propagated to all interested parties.
-For example, CELL_PUBLIC properties are propagated to all other CellApps that have a
-ghost of the entity, OTHER_CLIENTS properties are propagated to all clients that have the
-entity in their AoI, and so on.
-When changing the value of a property in a component other than a CellApp, the change
-can be manually propagated using remote method calls. For details, see Methods on page
-41.
+##### 3.3.1.1. Python和自定义用户类型导致的传输
+改变PYTHON属性（指List、Dict、Tuple之类）和用户自定义类型不会自动被传输，除非属性重新被赋值（reassigned）。  
+这个规则主要影响组合python类型，比如字典、数组和类，因为对对象的修改不会引发数据传输，除非属性重新复制给自身。  
 
-3.3.1.1. Forcing data propagation for Python and custom user types
-Changes to properties of PYTHON and custom user types are not automatically propagated,
-unless the property is reassigned.
-This behaviour mainly affects composite Python types like dictionaries, arrays, and classes,
-because modifications to the object do not cause data propagation unless the property is
-reassigned to itself.
+
 For example, if entity e has the property as illustrate below:
 <pythonProp>
 <Type> PYTHON </Type>
