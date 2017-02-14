@@ -278,23 +278,44 @@ Client/server的带宽很宝贵，客户端能直接访问的属性要尽量小�
 
 ##### 3.3.1.1. Python和自定义用户类型导致的传输
 改变PYTHON属性（指List、Dict、Tuple之类）和用户自定义类型不会自动被传输，除非属性重新被赋值（reassigned）。  
-这个规则主要影响组合python类型，比如字典、数组和类，因为对对象的修改不会引发数据传输，除非属性重新复制给自身。  
+这个规则主要影响组合python类型，比如字典、数组和类，因为对对象的修改不会引发数据传输，除非属性重新复制给自身。   
+例如，如果entity e有以下属性：  
 
-
-For example, if entity e has the property as illustrate below:
+```
 <pythonProp>
-<Type> PYTHON </Type>
-...
+	<Type> PYTHON </Type>
+	...
 </pythonProp>
-Assigning pythonProp to a new value will cause data propagation:
+```
+给python属性分配一个全新的值会引发数据传输：
+```
 e.pythonProp = { 'gold': 100 }
-
-However, modifying the value will not cause data propagation:
+```
+尽管如此，修改元素值不能引发数据传输：  
+```
 e.pythonProp[ 'gold' ] = 50
 e.pythonProp[ 'arrows' ] = 200
-Different parts of the entity will see different values for pythonProp, unless data
-propagation is manually triggered by reassigning the property back to itself:
+```
+entity的不同部分将看到python属性的不同值，除非数据传输被以把自己赋值给自己的方式手动触发：  
+```
 e.pythonProp = e.pythonProp
+```
+
+3.4. Implementing custom property data types
+Custom data types are useful for the implementation of data structures with complex behaviour that is shared between different components, or that must be attached to cell entities (in which case they must be able to be transferred from one cell to another).
+3.4.1. Wrapping a FIXED_DICT data type
+By default, the FIXED_DICT data type behaves like a Python dictionary. This behaviour can be changed by replacing the dictionary‐like FIXED_DICT type with another Python type (referred to as a wrapper type in this document).
+To do so, specify a type converter object in the <implementedBy> section in the FIXED_DICT type declaration. For example:
+Declaration of a wrapped FIXED_DICT data type CustomTypeConverterInstance must be a Python object that converts between
+FIXED_DICT instances and wrapper instances. It must implement the following methods:
+Properties
+               e.pythonProp = e.pythonProp
+ 
+ 
+ 
+ 
+<Type>
+
 
 [^1]: 等于python列表['Health potion', 'Bear skin', 'Wooden shield' ].
 [^2]: 基于base6编码的字符串必须被定义。
