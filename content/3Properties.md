@@ -301,13 +301,22 @@ entity的不同部分将看到python属性的不同值，除非数据传输被�
 e.pythonProp = e.pythonProp
 ```
 
-3.4. Implementing custom property data types
-Custom data types are useful for the implementation of data structures with complex behaviour that is shared between different components, or that must be attached to cell entities (in which case they must be able to be transferred from one cell to another).
-3.4.1. Wrapping a FIXED_DICT data type
-By default, the FIXED_DICT data type behaves like a Python dictionary. This behaviour can be changed by replacing the dictionary‐like FIXED_DICT type with another Python type (referred to as a wrapper type in this document).
-To do so, specify a type converter object in the <implementedBy> section in the FIXED_DICT type declaration. For example:
-Declaration of a wrapped FIXED_DICT data type CustomTypeConverterInstance must be a Python object that converts between
-FIXED_DICT instances and wrapper instances. It must implement the following methods:
+### 3.4. 实现自定义属性数据类型
+对于在不同组件间共享的复杂数据结构的实现，自定义数据类型非常有用。它们必须被依附到cell entity(在它们必须能够在cell间迁移的情况下).
+
+#### 3.4.1. 打包一个FIXED_DICT数据类型
+默认情况下，FIXED_DICT数据类型就像一个字典那样被使用。但当使用另外一个python类型（本文档中和一个包装类型有关）来取代它，就能让它的行为发生变化。  
+要做到这一点，要在FIXED_DICT数据类型声明的`<implementedBy>`块指定一个类型转换对象。一个打包的FIXED_DICT数据类型声明如下：  
+```
+<Type>
+	FIXED_DICT
+	<implementedBy> CustomTypeConverterInstance </implementedBy> 
+	<Properties> ... </Properties>
+	...
+</Type>
+```  
+
+ It must implement the following methods:
 Properties
                e.pythonProp = e.pythonProp
  
