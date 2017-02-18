@@ -10,4 +10,4 @@ BaseApp上的KBEngine.Proxy继承于KBEngine.Base，目的是为玩家控制enti
 `clientControlledProxy.giveClientTo( nonClientControlledProxy )`  
 注意，两个proxy必须在相同的BaseApp。   
 无论何时客户端在两个proxy之间转换，客户端衣服的cell entity会被销毁，客户端会接收到一个onEntitiesReset调用去清理它的当前的世界数据（knowledge of the world）。这会很快中断所有的游戏通信同时强制客户端刷新。如果只是cell entity被销毁，proxy的客户端数据还会被保持下来。
-![BaseApp managing bases and proxies](../image/BaseApp managing bases and proxies.jpeg)  
+![BaseApp managing bases and proxies](../image/BaseApp managing bases and proxies.png)  
