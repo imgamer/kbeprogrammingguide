@@ -32,15 +32,16 @@ BaseApp上的KBEngine.Proxy继承于KBEngine.Base，目的是为玩家控制enti
 
 * 速度  
 第一个检查是关于速度，保证它不超过topSpeed值。考虑到150ms的网络抖动速度下，会有一个很小的误差。小心处理避免这个延迟被利用——玩家会被允许在非常短的时间内快速移动，由这个抖动导致的，但不允许长时间如此。  
-* 场景几何
-第二个检查是场景几何，保证entity只能通过一个明确定义(well-defined)的入口离开当前chunk。
+* 场景几何（**这个说明有待改进**）
+第二个检查是场景几何，保证entity只能通过一个明确定义(well-defined)的入口离开当前chunk。  
+尽管速度非常快，这个检查为级别设计产生一个后果。控制角色移动（mobility）的障碍必须在chunks的级别上被表现（而不是chunk内部）。例如，一个有一堵墙的chunk，会有一个门用来进入到另外一边，不会被这个物理检查系统保护。替代方案是，两个chunk应当用来处理这个情况——墙的每一边有一个，门作为两者之间的入口。  
+* 定制的物理验证
+如果安装了定制的物理验证，它将会在速度和几何检查之间被调用。会使用以下参数调用定制的物理验证：  
+	* entity的指针
+	* vehicle的指针——如果entity不在vehicle上则为NULL。
+	* entity想要移动到的位置
+	* 上次物理检查后过去的时间  
+如果entity被允许移动到新位置，定制物理验证应当返回true，否则返回false。
 
-In spite of being very fast, this check does a consequence for level design. Barriers that control character mobility must be represented at the level of chunks. For example, a chunk with a wall across it, and a door giving access to the other side, is not protected by this physics checking system. Instead, two chunks should be used for this case – one on each side of the wall, with the door as a portal between them.
-  Custom physics validator
-If a custom physics validator is installed, then it will be called between the speed and the geometry check. The custom physics validator is called with the following parameters:
-  Pointer to the entity.
-  Pointer to the vehicle – NULL if the entity is not on a vehicle.   The position to which the entity wants to move.
-  The time elapsed since the last physics check.
-The custom physics validator should return true if the entity is allowed to move to the new position, or false if it is not allowed.
 
  
